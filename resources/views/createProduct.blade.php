@@ -17,12 +17,13 @@
     <button type="submit" class="btn btn-primary">Criar</button>
 </form>
 
-<hr>
-<h3>Produto Criado</h3>
-
-<p><strong>Nome:</strong> {{ $product['name'] }}</p>
-<p><strong>Descrição:</strong> {{ $product['description'] }}</p>
-<p><strong>Preço:</strong> {{ $product['price'] }}</p>
+@if($product['name'] && $product['description'] && $product['price'])
+    <hr>
+    <h3>Produto Criado</h3>
+    <p><strong>Nome:</strong> {{ $product['name'] }}</p>
+    <p><strong>Descrição:</strong> {{ $product['description'] }}</p>
+    <p><strong>Preço:</strong> {{ $product['price'] }}</p>
+@endif
 
 
 
