@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,13 +13,15 @@ class ProductController extends Controller
         return view('createProduct');
     }
 
-    public function storage(Request $request)
+    public function storage(ProductRequest $request)
     {
-        $product = new Product();
+        $data = $request->validated();
 
-        $product->name = $request->input('name');
+        $product = new Product($data);
+
+        /*$product->name = $request->input('name');
         $product->description = $request->input('description');
-        $product->price = $request->input('price');
+        $product->price = $request->input('price');*/
 
         $product->save();
 
@@ -46,13 +49,17 @@ class ProductController extends Controller
         return view('editProduct', ['product' => $product]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
+        $data = $request->validated();
+
         $product = Product::findOrfail($id);
 
-        $product->name = $request->input('name');
+        $product->fill($data);
+
+        /*$product->name = $request->input('name');
         $product->description = $request->input('description');
-        $product->price = $request->input('price');
+        $product->price = $request->input('price');*/
 
         $product->save();
 
