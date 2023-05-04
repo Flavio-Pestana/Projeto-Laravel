@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -10,14 +11,17 @@ class ProductController extends Controller
 {
     public function create()
     {
-        return view('createProduct');
+        $categories = Category::all();
+        return view('createProduct', ['categories' => $categories]);
     }
 
     public function storage(ProductRequest $request)
     {
         $data = $request->validated();
-
         $product = new Product($data);
+
+        $category = Category::find($request->input('category_id'));
+        $product->category()->associate($category);
 
         /*$product->name = $request->input('name');
         $product->description = $request->input('description');
@@ -37,7 +41,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category')->get();
 
         return view('products', ['products' => $products]);
     }
@@ -45,8 +49,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+        $categories = Category::all();
 
-        return view('editProduct', ['product' => $product]);
+        return view('editProduct', ['product' => $product, 'categories' => $categories]);
     }
 
     public function update(ProductRequest $request, $id)
@@ -56,6 +61,8 @@ class ProductController extends Controller
         $product = Product::findOrfail($id);
 
         $product->fill($data);
+
+        $product->category_id = $request->input('category_id');
 
         /*$product->name = $request->input('name');
         $product->description = $request->input('description');

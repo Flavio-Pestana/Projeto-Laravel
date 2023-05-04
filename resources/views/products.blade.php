@@ -18,6 +18,7 @@
             <td>{{ $product->name }}</td>
             <td>{{ $product->description }}</td>
             <td>{{ $product->price }}</td>
+            <td>{{ $product->category ? $product->category->name : 'Nenhuma categoria associada' }}</td>
             <td>
                 <a href="{{ route('show', $product->id) }}" class="btn btn-primary">Ver</a>
                 <a href="{{ route('edit', $product->id) }}" class="btn btn-secondary">Editar</a>

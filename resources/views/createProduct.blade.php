@@ -27,6 +27,15 @@
         @enderror
     </div>
 
+    <div class="form-group">
+        <label for="category_id">Categoria</label>
+        <select name="category_id">
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Criar</button>
 
     <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('storage') }}'">Ir para lista de produtos</button>

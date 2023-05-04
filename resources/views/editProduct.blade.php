@@ -21,5 +21,14 @@
         <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" step="0.01">
     </div>
 
+    <div>
+        <label for="category_id">Categoria</label>
+        <select name="category_id">
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" @if($category->id === $product->category_id) selected @endif>{{ $category->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Atualizar</button>
 </form>
