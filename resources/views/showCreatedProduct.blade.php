@@ -35,6 +35,10 @@
                             </div>
                         </div>
 
+                        @if($product->category)
+                            <p>Categoria: {{ $product->category->name }}</p>
+                        @endif
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('index', ['id' => $product->id]) }}'">Ir para lista de produtos</button>

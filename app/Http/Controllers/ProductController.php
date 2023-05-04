@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -9,16 +11,21 @@ class ProductController extends Controller
 {
     public function create()
     {
-        return view('createProduct');
+        $categories = Category::all();
+        return view('createProduct', ['categories' => $categories]);
     }
 
-    public function storage(Request $request)
+    public function storage(ProductRequest $request)
     {
-        $product = new Product();
+        $data = $request->validated();
+        $product = new Product($data);
 
-        $product->name = $request->input('name');
+        $category = Category::find($request->input('category_id'));
+        $product->category()->associate($category);
+
+        /*$product->name = $request->input('name');
         $product->description = $request->input('description');
-        $product->price = $request->input('price');
+        $product->price = $request->input('price');*/
 
         $product->save();
 
@@ -34,7 +41,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category')->get();
 
         return view('products', ['products' => $products]);
     }
@@ -42,17 +49,24 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+        $categories = Category::all();
 
-        return view('editProduct', ['product' => $product]);
+        return view('editProduct', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
+        $data = $request->validated();
+
         $product = Product::findOrfail($id);
 
-        $product->name = $request->input('name');
+        $product->fill($data);
+
+        $product->category_id = $request->input('category_id');
+
+        /*$product->name = $request->input('name');
         $product->description = $request->input('description');
-        $product->price = $request->input('price');
+        $product->price = $request->input('price');*/
 
         $product->save();
 
